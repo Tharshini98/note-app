@@ -1,52 +1,59 @@
 import { useParams, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
-import {useState} from "react";
+function EditNote({ notes, updateNote }) {
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-function EditNote({notes, updateNote}){
-    const{id} = useParams();
-    const navigate = useNavigate();
+  const existingNote = notes.find((n) => n.id === id);
+  const [note, setNote] = useState(existingNote || { title: "", content: "" });
 
-    const note = notes.find((n) => n.id === parseInt(id));
-    if(!note) return (<p>Page Not Found</p>)
+  if (!existingNote) {
+    return (
+      <div className="text-center mt-10 text-red-500 font-bold">
+        Note not found.
+      </div>
+    );
+  }
 
-        const [title, setTitle] = useState(note.title);
-        const [content, setContent] = useState(note.content);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (note.title.trim()) {
+      updateNote({ ...existingNote, title: note.title, content: note.content });
+      navigate("/");
+    }
+  };
 
-        const handleUpdate = () => {
-            const updatedNote = {
-                ...note, title, content
-            };
-            updateNote(updatedNote)
-            navigate("/");
-        };
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="m-10 max-w-xl mx-auto p-6 bg-white rounded shadow"
+    >
+      <h2 className="text-xl font-bold mb-4 text-blue-700">Edit Note</h2>
 
-        return(
-            <div className="max-w-lg mx-auto mt-10 p-6 bg-gray-100 rounded shadow-md">
-                 <h2 className="text-2xl font-bold text-gray-600 mb-4">Edit Note</h2>
-
-                  <input
+      <input
         type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        className="w-full px-4 py-2 mb-4 border border-gray-300 rounded"
-        placeholder="Note Title"
+        value={note.title}
+        onChange={(e) => setNote({ ...note, title: e.target.value })}
+        className="w-full px-3 py-2 mb-4 border rounded"
+        required
       />
 
       <textarea
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        className="w-full h-40 px-4 py-2 mb-4 border border-gray-300 rounded"
-        placeholder="Note Content"
+        value={note.content}
+        onChange={(e) => setNote({ ...note, content: e.target.value })}
+        className="w-full px-3 py-2 mb-4 border rounded h-40"
+        required
       />
 
       <button
-        onClick={handleUpdate}
+        type="submit"
         className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
       >
-        Update
+        Update Note
       </button>
-            </div>
-        );
+    </form>
+  );
 }
 
 export default EditNote;
