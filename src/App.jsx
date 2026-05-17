@@ -29,14 +29,29 @@ function App() {
   };
 
   return (
-   
-      <Routes>
-        <Route path="/" element={<Home notes={notes} updateNote={updateNote} />} />
-        <Route path="/addNote" element={<AddNote addNote={addNote} />} />
-        <Route path="/edit/:id" element={<EditNote notes={notes} updateNote={updateNote} />} />
-        <Route path="*" element={<p className="m-10 text-center text-red-600 font-bold">Page Not Found</p>} />
-      </Routes>
-   
+    <Routes>
+      <Route path="/"         element={<Home notes={notes} updateNote={updateNote} />} />
+      <Route path="/addNote"  element={<AddNote addNote={addNote} />} />
+      <Route path="/edit/:id" element={<EditNote notes={notes} updateNote={updateNote} />} />
+      <Route path="*"         element={
+        <div style={{
+          minHeight: "100vh",
+          background: "var(--bg)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column",
+          gap: "1rem",
+          fontFamily: "var(--ff-display)",
+          fontStyle: "italic",
+          fontSize: "1.5rem",
+          color: "var(--ink-muted)",
+        }}>
+          <span style={{ fontSize: "3rem" }}>🗺️</span>
+          Page Not Found
+        </div>
+      } />
+    </Routes>
   );
 }
 
